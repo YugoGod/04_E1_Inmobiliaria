@@ -8,20 +8,21 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.example.a04_creacionelementosporcodigo.databinding.ActivityAddAlumnoBinding;
+import com.example.a04_creacionelementosporcodigo.databinding.ActivityAddPisoBinding;
 import com.example.a04_creacionelementosporcodigo.modelos.Alumno;
+import com.example.a04_creacionelementosporcodigo.modelos.Piso;
 
-public class AddAlumnoActivity extends AppCompatActivity {
+public class AddPisoActivity extends AppCompatActivity {
 
     //  1. Activa el Binding para la Activity
-    private ActivityAddAlumnoBinding binding;
+    private ActivityAddPisoBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Construye el Binding
-        binding = ActivityAddAlumnoBinding.inflate(getLayoutInflater());
+        binding = ActivityAddPisoBinding.inflate(getLayoutInflater());
 
         // Asocia el Binding al Activity
         setContentView(binding.getRoot());
@@ -37,16 +38,16 @@ public class AddAlumnoActivity extends AppCompatActivity {
         binding.btnCrearAddAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Alumno alumno = createAlumno();
-                if (alumno != null){
+                Piso piso = createPiso();
+                if (piso != null){
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("ALUMNO", alumno);
+                    bundle.putSerializable("PISO", piso);
                     Intent intent = new Intent();
                     intent.putExtras(bundle);
                     setResult(RESULT_OK, intent);
                     finish();
                 }else {
-                    Toast.makeText(AddAlumnoActivity.this, "FALTAN DATOS", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPisoActivity.this, "FALTAN DATOS", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -54,21 +55,11 @@ public class AddAlumnoActivity extends AppCompatActivity {
 
     }
 
-    private Alumno createAlumno() {
-        if (binding.txtNombreAddAlumno.getText().toString().isEmpty() || binding.txtApellidosAddAlumno.getText().toString().isEmpty()){
-            return null;
-        }
-        if (binding.spCiclosAddAlumno.getSelectedItemPosition() == 0){
-            return null;
-        }
-        if (!binding.rbGrupoAAddAlumno.isChecked() && !binding.rbGrupoBAddAlumno.isChecked() && !binding.rbGrupoCAddAlumno.isChecked()){
+    private Piso createPiso() {
+        if (binding.txtCiudadAddPiso.getText().toString().isEmpty() || binding.txtCPAddPiso.getText().toString().isEmpty() || binding.txtNumeroAddPiso.getText().toString().isEmpty() || binding.txtDireccionAddPiso.getText().toString().isEmpty()){
             return null;
         }
 
-        String ciclo = binding.spCiclosAddAlumno.getSelectedItem().toString();
-        RadioButton rb = findViewById(binding.rgGruposAddAlumno.getCheckedRadioButtonId());
-        char grupo = rb.getText().charAt(0);
-
-        return new Alumno(binding.txtNombreAddAlumno.getText().toString(), binding.txtApellidosAddAlumno.getText().toString(), ciclo, grupo);
+        return new Piso(binding.txtDireccionAddPiso.getText().toString(), Integer.parseInt(binding.txtNumeroAddPiso.getText().toString()), binding.txtCiudadAddPiso.getText().toString(), binding.txtProvinciaAddPiso.getText().toString(),binding.txtCPAddPiso.getText().toString(), binding.rbAddPiso.getRating());
     }
 }

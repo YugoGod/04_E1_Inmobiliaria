@@ -3,8 +3,8 @@ package com.example.a04_creacionelementosporcodigo;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.a04_creacionelementosporcodigo.modelos.Alumno;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.a04_creacionelementosporcodigo.databinding.ActivityMainBinding;
+import com.example.a04_creacionelementosporcodigo.modelos.Piso;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -15,10 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.example.a04_creacionelementosporcodigo.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
     // 2. Lógica para pintar los elementos -> pintarElementos();.
     // 3. Conjunto de datos.
     // 4. Plantilla para los datos.
-    private ArrayList<Alumno> alumnoList;
+    private ArrayList<Piso> pisoList;
 
-    private ActivityResultLauncher<Intent> launcherCrearAlumnos;
+    private ActivityResultLauncher<Intent> launcherCrearPisos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         
-        alumnoList = new ArrayList<>();
+        pisoList = new ArrayList<>();
         
         inicializaLaunchers();
 
@@ -53,20 +50,20 @@ public class MainActivity extends AppCompatActivity {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launcherCrearAlumnos.launch(new Intent(MainActivity.this, AddAlumnoActivity.class));
+                launcherCrearPisos.launch(new Intent(MainActivity.this, AddPisoActivity.class));
             }
         });
     }
 
     private void inicializaLaunchers() {
-        launcherCrearAlumnos = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        launcherCrearPisos = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == RESULT_OK){
                     if (result.getData() != null && result.getData().getExtras() != null){
-                        Alumno alumno = (Alumno) result.getData().getExtras().getSerializable("ALUMNO");
-                        alumnoList.add(alumno);
-                        Toast.makeText(MainActivity.this, alumnoList.size() + "", Toast.LENGTH_SHORT).show();
+                        Piso piso = (Piso) result.getData().getExtras().getSerializable("PISO");
+                        pisoList.add(piso);
+                        Toast.makeText(MainActivity.this, pisoList.get(0).toString() + "", Toast.LENGTH_SHORT).show();
                         pintarElementos();
                     }
                 }
@@ -76,17 +73,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void pintarElementos() {
         binding.content.contenedor.removeAllViews();
-        for (Alumno alumno : alumnoList) {
-            View alumnoView = LayoutInflater.from(MainActivity.this).inflate(R.layout.alumno_model_view, null);
-            TextView lblNombre = alumnoView.findViewById(R.id.lblNombreAlumnoView);
-            TextView lblApellidos = alumnoView.findViewById(R.id.lblApellidosAlumnoView);
-            TextView lblCiclo = alumnoView.findViewById(R.id.lblCicloAlumnoView);
-            TextView lblGrupo = alumnoView.findViewById(R.id.lblGrupoAlumnoView);
+        for (Piso piso : pisoList) {
+            View alumnoView = LayoutInflater.from(MainActivity.this).inflate(R.layout.piso_model_view, null);
+            TextView lblCalle = alumnoView.findViewById(R.id.lblCallePisoView);
+            TextView lblNumero = alumnoView.findViewById(R.id.lblNumeroPisoView);
+            TextView lblProvincia = alumnoView.findViewById(R.id.lblProvinciaPisoView);
+            RatingBar rbValoracion = alumnoView.findViewById(R.id.rbValoracionPisoView);
 
-            lblNombre.setText(alumno.getNombre());
-            lblApellidos.setText(alumno.getApellidos());
-            lblCiclo.setText(alumno.getCiclo());
-            lblGrupo.setText(String.valueOf(alumno.getGrupo()));
+            lblCalle.setText(piso.getDireccion());
+            lblNumero.setText(piso.getNumero() + "");
+            lblProvincia.setText(piso.getProvincia());
+            rbValoracion.setRating(piso.getValoracion());
 
             binding.content.contenedor.addView(alumnoView);
         }

@@ -18,6 +18,9 @@ public class Alumno implements Serializable {
         this.grupo = grupo;
     }
 
+    public Alumno(String nombre, String apellidos, String ciclo, String toString, String toString1, float rating) {
+    }
+
     // GETTERS AND SETTERS
     public String getNombre() {
         return nombre;

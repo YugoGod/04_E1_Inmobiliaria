@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">04_CreacionElementosPorCodigo</string>
-    <string name="nombre">Nombre</string>
-    <string name="apellidos">Apellidos</string>
-    <string name="grupo_a">A</string>
-    <string name="grupo_b">B</string>
-    <string name="grupo_c">C</string>
-    <string name="cancelar">Cancelar</string>
+    <string name="direccion">Direccion</string>
+    <string name="numero">Numero</string>
+    <string name="ciudad">Ciudad</string>
+    <string name="provincia">Provincia</string>
+    <string name="cp">Código Postal</string>
+    <string name="valoracion">Valoracion</string>
     <string name="aceptar">Crear</string>
+    <string name="cancelar">Cancelar</string>
     <string-array name="spinner_ciclos">
         <item>Selecciona un Ciclo</item>
         <item>DAM</item>
