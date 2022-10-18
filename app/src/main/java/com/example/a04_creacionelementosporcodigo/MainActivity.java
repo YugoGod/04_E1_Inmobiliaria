@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Piso> pisoList;
 
     private ActivityResultLauncher<Intent> launcherCrearPisos;
+    private ActivityResultLauncher<Intent> launcherEditPisos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 launcherCrearPisos.launch(new Intent(MainActivity.this, AddPisoActivity.class));
             }
         });
+
+
     }
 
     private void inicializaLaunchers() {
@@ -69,23 +72,54 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        launcherEditPisos = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == RESULT_OK){
+                    if (result.getData() != null && result.getData().getExtras() != null){
+                        Piso piso = (Piso) result.getData().getExtras().getSerializable("PISO");
+                        pisoList.remove(result.getData().getExtras().getInt("NUM"));
+                        pisoList.add(piso);
+                        Toast.makeText(MainActivity.this, pisoList.get(0).toString() + "PISO ACTUALIZADO", Toast.LENGTH_SHORT).show();
+                        pintarElementos();
+                    }
+                }
+            }
+        });
     }
 
     private void pintarElementos() {
         binding.content.contenedor.removeAllViews();
+        int c = 0;
         for (Piso piso : pisoList) {
-            View alumnoView = LayoutInflater.from(MainActivity.this).inflate(R.layout.piso_model_view, null);
-            TextView lblCalle = alumnoView.findViewById(R.id.lblCallePisoView);
-            TextView lblNumero = alumnoView.findViewById(R.id.lblNumeroPisoView);
-            TextView lblProvincia = alumnoView.findViewById(R.id.lblProvinciaPisoView);
-            RatingBar rbValoracion = alumnoView.findViewById(R.id.rbValoracionPisoView);
+            View pisoView = LayoutInflater.from(MainActivity.this).inflate(R.layout.piso_model_view, null);
+            TextView lblCalle = pisoView.findViewById(R.id.lblCallePisoView);
+            TextView lblNumero = pisoView.findViewById(R.id.lblNumeroPisoView);
+            TextView lblProvincia = pisoView.findViewById(R.id.lblProvinciaPisoView);
+            RatingBar rbValoracion = pisoView.findViewById(R.id.rbValoracionPisoView);
 
             lblCalle.setText(piso.getDireccion());
             lblNumero.setText(piso.getNumero() + "");
             lblProvincia.setText(piso.getProvincia());
             rbValoracion.setRating(piso.getValoracion());
 
-            binding.content.contenedor.addView(alumnoView);
+            binding.content.contenedor.addView(pisoView);
+
+            int finalC = c;
+            pisoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, EditPisoActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("PISO",piso);
+                    bundle.putInt("NUM", finalC);
+                    intent.putExtras(bundle);
+                    launcherEditPisos.launch(intent);
+                }
+            });
+            c++;
         }
+
     }
 }

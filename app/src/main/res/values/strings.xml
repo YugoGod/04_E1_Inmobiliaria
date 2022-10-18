@@ -8,6 +8,7 @@
     <string name="valoracion">Valoracion</string>
     <string name="aceptar">Crear</string>
     <string name="cancelar">Cancelar</string>
+    <string name="editar">Editar</string>
     <string-array name="spinner_ciclos">
         <item>Selecciona un Ciclo</item>
         <item>DAM</item>
